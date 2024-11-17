@@ -2,18 +2,19 @@ import express from 'express';
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }))
+app.use(express.urlencoded({ extended: true }));
+
 
 const porta = 3000;
 const host = '0.0.0.0';
 
-var listaProdutos = [];
+var listaEmpresas = [];
 
-function cadastroProdutoView(req, res) {
+function cadastrodeEmpresasView(req, res) {
     res.send(`
         <html>
 <head>
-    <title>Cadastro de Produto</title>
+    <title>Cadastro de Empresas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXhW+ALEwIH" crossorigin="anonymous">
     <meta charset="utf-8">
     <style>
@@ -69,41 +70,78 @@ function cadastroProdutoView(req, res) {
 <body>
 <center>
     <div class="container">
-        <h1>Cadastro de Produto</h1>
-        <form method="POST" action="/cadastrarProduto" class="row g-3" novalidate>
+        <h1>Cadastro de Empresas</h1>
+      <form method="POST" action="/cadastrarEmpresa" class="row g-3" novalidate>
+
             <div class="col-md-12">
-                <label for="nome" class="form-label">Nome do Produto:</label>
+                <label for="nome" class="form-label">Nome do Fornecedor:</label>
                 <input type="text" class="form-control" id="nome" name="nome" >
             </div>
             <div class="col-md-6">
-                <label for="cod" class="form-label">Código:</label>
-                <input type="number" class="form-control" id="cod" name="cod" >
+                 <label for="cnpj" class="form-label">CNPJ:</label>
+                <input type="text" class="form-control" id="cnpj" name="cnpj" >
             </div>
             <div class="col-md-6">
-                <label for="quant" class="form-label">Quantidade:</label>
-                <input type="number" class="form-control" id="quant" name="quant" >
+                <label for="nomef" class="form-label">Nome Fantasia:</label>
+                <input type="text" class="form-control" id="nomef" name="nomef" >
             </div>
             <div class="col-md-6">
-                <label for="valor" class="form-label">Valor por unidade:</label>
-                <input type="number" class="form-control" id="valor" name="valor" step="0.01" >
+    <label for="Endereco" class="form-label">Endereço:</label>
+    <input type="text" class="form-control" id="endereco" name="endereco">
+</div>
+            <div class="col-md-6">
+                <label for="tel" class="form-label">Telefone:</label>
+                <input type="text" class="form-control" id="tel" name="tel" >
             </div>
             <div class="col-md-6">
-                <label for="tipo" class="form-label">Tipo do Produto:</label>
-                <select class="form-select" id="tipo" name="tipo" >
-                    <option selected value="">Escolha</option>
-                    <option>Perecíveis</option>
-                    <option>Não Perecíveis</option>
-                    <option>Limpeza</option>
-                    <option>Hortifruti</option>
-                    <option>Higiene</option>
-                    <option>Bebidas</option>
-                    <option>Congelados</option>
-                    <option>Produtos Pets</option>
+                <label for="email" class="form-label">E-mail:</label>
+                <input type="text" class="form-control" id="email" name="email" >
+            </div>
+            
+            <div class="col-md-6">
+                <label for="cep" class="form-label">CEP:</label>
+                <input type="text" class="form-control" id="cep" name="cep" >
+            </div>
+            <div class="col-md-6">
+                <label for="uf" class="form-label">UF:</label>
+               <select class="form-select" id="uf" name="uf">
+                    <option value="" selected disabled>Selecione o estado</option>
+                    <option value="AC">Acre (AC)</option>
+                    <option value="AL">Alagoas (AL)</option>
+                    <option value="AP">Amapá (AP)</option>
+                    <option value="AM">Amazonas (AM)</option>
+                    <option value="BA">Bahia (BA)</option>
+                    <option value="CE">Ceará (CE)</option>
+                    <option value="DF">Distrito Federal (DF)</option>
+                    <option value="ES">Espírito Santo (ES)</option>
+                    <option value="GO">Goiás (GO)</option>
+                    <option value="MA">Maranhão (MA)</option>
+                    <option value="MT">Mato Grosso (MT)</option>
+                    <option value="MS">Mato Grosso do Sul (MS)</option>
+                    <option value="MG">Minas Gerais (MG)</option>
+                    <option value="PA">Pará (PA)</option>
+                    <option value="PB">Paraíba (PB)</option>
+                    <option value="PR">Paraná (PR)</option>
+                    <option value="PE">Pernambuco (PE)</option>
+                    <option value="PI">Piauí (PI)</option>
+                    <option value="RJ">Rio de Janeiro (RJ)</option>
+                    <option value="RN">Rio Grande do Norte (RN)</option>
+                    <option value="RS">Rio Grande do Sul (RS)</option>
+                    <option value="RO">Rondônia (RO)</option>
+                    <option value="RR">Roraima (RR)</option>
+                    <option value="SC">Santa Catarina (SC)</option>
+                    <option value="SP">São Paulo (SP)</option>
+                    <option value="SE">Sergipe (SE)</option>
+                    <option value="TO">Tocantins (TO)</option>
                 </select>
+            </div>
+             <div class="col-md-6">
+                <label for="cid" class="form-label">Cidade:</label>
+                <input type="text" class="form-control" id="cid" name="cid" >
             </div>
             <br>
             <div class="col-12">
-                <button class="btn btn-primary" type="submit" href="/cadastrarProduto">Cadastrar</button>
+                  <button class="btn btn-primary" type="submit">Cadastrar</button>
             </div>
         </form>
     </div>
@@ -168,7 +206,7 @@ function menuView(req, resp) {
             <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/cadastrarProduto">Cadastrar Produtos</a>
+                        <a class="nav-link active" aria-current="page" href="/cadastrarEmpresa">Cadastrar Empresas</a>
                     </li>
                 </ul>
             </div>
@@ -180,26 +218,23 @@ function menuView(req, resp) {
 </html>`)
 }
 
-function cadastraProduto(req, resp) {
-
+function cadastraEmpresa(req, resp) {
     const nome = req.body.nome;
-    const codigo = req.body.cod;
-    const quantidade = req.body.quant;
-    const valor = req.body.valor;
-    const tipo = req.body.tipo;
+    const cnpj = req.body.cnpj;
+    const nomef = req.body.nomef;
+    const endereco = req.body.endereco;
+    const tel = req.body.tel;
+    const email = req.body.email;
+    const uf = req.body.uf;
+    const cep = req.body.cep;
+    const cid = req.body.cid;
 
-
-
-
-    if (nome && codigo > 0 && quantidade > 0 && valor > 0 & tipo) {
-
-        const produto = { nome, codigo, quantidade, valor, tipo };
-
-
-        listaProdutos.push(produto);
+    if (nome && cnpj && nomef && endereco && tel && email && uf && cep && cid) {
+        const empresa = { nome, cnpj, nomef, endereco, tel, email, uf, cep, cid };
+        listaEmpresas.push(empresa);
         resp.write(`<html>
     <head>
-        <title>Lista de Produtos</title>
+        <title>Lista de Empresas</title>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXhW+ALEwIH" crossorigin="anonymous">
         <meta charset="utf-8">
         <style>
@@ -275,33 +310,42 @@ function cadastraProduto(req, resp) {
         </style>
     </head>
     <body>
+    
     <center>
         <div class="container">
-            <h1>Lista de Produtos</h1>
+            <h1>Lista de Empresas</h1>
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th scope="col">Nome do Produto</th>
-                        <th scope="col">Código</th>
-                        <th scope="col">Quantidade</th>
-                        <th scope="col">Valor</th>
-                        <th scope="col">Tipo</th>
+                        <th scope="col">Nome da Empresa</th>
+                        <th scope="col">CNPJ</th>
+                        <th scope="col">Nome Fantasia</th>
+                        <th scope="col">Endereço</th>
+                        <th scope="col">Telefone</th>
+                        <th scope="col">E-mail</th>
+                        <th scope="col">UF</th>
+                        <th scope="col">CEP</th>
+                        <th scope="col">Cidade</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${listaProdutos.map(produto => `
+                    ${listaEmpresas.map(Empresa => `
                         <tr>
-                            <td>${produto.nome}</td>
-                            <td>${produto.codigo}</td>
-                            <td>${produto.quantidade}</td>
-                            <td>R$ ${parseFloat(produto.valor).toFixed(2)}</td>
-                            <td>${produto.tipo}</td>
+                            <td>${Empresa.nome}</td>
+                            <td>${Empresa.cnpj}</td>
+                            <td>${Empresa.nomef}</td>
+                            <td>${Empresa.endereco}</td>
+                            <td>${Empresa.tel}</td>
+                            <td>${Empresa.email}</td>
+                            <td>${Empresa.uf}</td>
+                            <td>${Empresa.cep}</td>
+                            <td>${Empresa.cid}</td>
                         </tr>
                     `).join('')}
                 </tbody>
             </table>
             <div class="d-flex">
-                <a class="btn btn-primary" href="/cadastrarProduto">Continuar Cadastrando</a>
+                <a class="btn btn-primary" href="/cadastrarEmpresa">Continuar Cadastrando</a>
                 <a class="btn btn-secondary" href="/">Voltar ao Menu</a>
             </div>
         </div>
@@ -312,19 +356,39 @@ function cadastraProduto(req, resp) {
 
 `);
     } else {
-        const tp = {
-            "Perecíveis": "Perecíveis",
-            "Não Perecíveis": "Não Perecíveis",
-            "Limpeza": "Limpeza",
-            "Hortifruti": "Hortifruti",
-            "Higiene": "Higiene",
-            "Bebidas": "Bebidas",
-            "Congelados": "Congelados",
-            "Produtos Pets": "Produtos Pets",
-        }
+        const ufs = {
+            "AC": "Acre (AC)",
+            "AL": "Alagoas (AL)",
+            "AP": "Amapá (AP)",
+            "AM": "Amazonas (AM)",
+            "BA": "Bahia (BA)",
+            "CE": "Ceará (CE)",
+            "DF": "Distrito Federal (DF)",
+            "ES": "Espírito Santo (ES)",
+            "GO": "Goiás (GO)",
+            "MA": "Maranhão (MA)",
+            "MT": "Mato Grosso (MT)",
+            "MS": "Mato Grosso do Sul (MS)",
+            "MG": "Minas Gerais (MG)",
+            "PA": "Pará (PA)",
+            "PB": "Paraíba (PB)",
+            "PR": "Paraná (PR)",
+            "PE": "Pernambuco (PE)",
+            "PI": "Piauí (PI)",
+            "RJ": "Rio de Janeiro (RJ)",
+            "RN": "Rio Grande do Norte (RN)",
+            "RS": "Rio Grande do Sul (RS)",
+            "RO": "Rondônia (RO)",
+            "RR": "Roraima (RR)",
+            "SC": "Santa Catarina (SC)",
+            "SP": "São Paulo (SP)",
+            "SE": "Sergipe (SE)",
+            "TO": "Tocantins (TO)"
+        };
+
         resp.write(` <html>
 <head>
-    <title>Cadastro de Produto</title>
+    <title>Cadastro de Empresas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXhW+ALEwIH" crossorigin="anonymous">
     <meta charset="utf-8">
     <style>
@@ -380,48 +444,80 @@ function cadastraProduto(req, resp) {
 <body>
 <center>
     <div class="container">
-        <h1>Cadastro de Produto</h1>
-        <form method="POST" action="/cadastrarProduto" class="row g-3" novalidate>
+        <h1>Cadastro de Empresas</h1>
+       <form method="POST" action="/cadastrarEmpresa" class="row g-3" novalidate>
+
             <div class="col-md-12">
-                <label for="nome" class="form-label">Nome do Produto:</label>
+                <label for="nome" class="form-label">Nome do Fornecedor:</label>
                 <input type="text" class="form-control" id="nome" name="nome" value="${nome}" >
                 `);
         if (!nome) {
             resp.write(`
                         <div>
-                           <span><p style="color: red;" >Você deve informar o nome do produto</p></span> 
+                           <span><p style="color: red;" >Você deve informar o nome da Empresa</p></span> 
                         </div>`);
         }
         resp.write(`</div>
             <div class="col-md-6">
-                <label for="cod" class="form-label">Código:</label>
-                <input type="number" class="form-control" id="cod" name="cod" value="${codigo}">`);
-        if (!codigo) {
+                 <label for="cnpj" class="form-label">CNPJ:</label>
+                <input type="text" class="form-control" id="cnpj" name="cnpj" value="${cnpj}" >`);
+        if (!cnpj) {
             resp.write(`
               <div>
                   <span>
-                   <p style="color: red;">Você deve informar o código do produto</p>
+                   <p style="color: red;">Você deve informar o CNPJ da Empresa</p>
                   </span> 
              </div>`);
         }
-        resp.write(`</div>
+        resp.write(` </div>
             <div class="col-md-6">
-                <label for="quant" class="form-label">Quantidade:</label>
-                <input type="number" class="form-control" id="quant" name="quant" value="${quantidade}">`);
-        if (!quantidade) {
+                <label for="nomef" class="form-label">Nome Fantasia:</label>
+                <input type="text" class="form-control" id="nomef" name="nomef" value="${nomef}" >`);
+        if (!nomef) {
             resp.write(`
                         <div>
-                           <span><p style="color: red;" >Você deve informar a quantidade do produto</p></span> 
+                           <span><p style="color: red;" >Você deve informar o Nome Fantasia da Empresa</p></span> 
+                        </div>`);
+        }
+        resp.write(` </div>
+            <div class="col-md-6">
+                <label for="endereco" class="form-label">Endereço:</label>
+                <input type="text" class="form-control" id="endereco" name="endereco" value="${endereco}" >`);
+        if (!endereco) {
+            resp.write(`
+                        <div>
+                           <span><p  style="color: red;">Você deve informar o endereço da Empresa</p></span> 
                         </div>`);
         }
         resp.write(`</div>
             <div class="col-md-6">
-                <label for="valor" class="form-label">Valor por unidade:</label>
-                <input type="number" class="form-control" id="valor" name="valor" step="0.01" value="${valor}" >`);
-        if (!valor) {
+                <label for="tel" class="form-label">Telefone:</label>
+                <input type="text" class="form-control" id="tel" name="tel" value="${tel}"  >`);
+        if (!tel) {
             resp.write(`
                         <div>
-                           <span><p  style="color: red;">Você deve informar o valor do produto</p></span> 
+                           <span><p  style="color: red;">Você deve informar o Telefone da Empresa</p></span> 
+                        </div>`);
+        }
+        resp.write(`</div>
+            <div class="col-md-6">
+                <label for="email" class="form-label">E-mail:</label>
+                <input type="text" class="form-control" id="email" name="email"  value="${email}"  >`);
+        if (!email) {
+            resp.write(`
+                        <div>
+                           <span><p  style="color: red;">Você deve informar o E-mail da Empresa</p></span> 
+                        </div>`);
+        }
+        resp.write(` </div>
+            
+            <div class="col-md-6">
+                <label for="cep" class="form-label">CEP:</label>
+                <input type="text" class="form-control" id="cep" name="cep" value="${cep}"   >`);
+        if (!cep) {
+            resp.write(`
+                        <div>
+                           <span><p  style="color: red;">Você deve informar o CEP da Empresa</p></span> 
                         </div>`);
         }
         resp.write(`</div>
@@ -429,19 +525,29 @@ function cadastraProduto(req, resp) {
                 <label for="tipo" class="form-label">Tipo do Produto:</label>
                 <select class="form-select" id="tipo" name="tipo">`);
 
-        for (let [sigla, nomeTipo] of Object.entries(tp)) {
-            if (sigla == tipo) {
-                resp.write(`<option selected value ="${sigla}">${nomeTipo}</option>`);
+        for (let [sigla, nomeUf] of Object.entries(ufs)) {
+            if (sigla == uf) {
+                resp.write(`<option selected value ="${sigla}">${nomeUf}</option>`);
             }
             else {
-                resp.write(`<option value ="${sigla}">${nomeTipo}</option>`);
+                resp.write(`<option value ="${sigla}">${nomeUf}</option>`);
             }
         }
         resp.write(`</select>`);
+        resp.write(`  </div>
+             <div class="col-md-6">
+                <label for="cid" class="form-label">Cidade:</label>
+                <input type="text" class="form-control" id="cid" name="cid"  value="${cid}" >`);
+        if (!cid) {
+            resp.write(`
+                        <div>
+                           <span><p  style="color: red;">Você deve informar a Cidade da Empresa</p></span> 
+                        </div>`);
+        }
         resp.write(` </div>
             <br>
             <div class="col-12">
-                <button class="btn btn-primary" type="submit" href="/cadastrarProduto">Cadastrar</button>
+                <button class="btn btn-primary" type="submit" href="/cadastrarEmpresa">Cadastrar</button>
             </div>
         </form>
     </div>
@@ -455,10 +561,12 @@ function cadastraProduto(req, resp) {
 
 
 app.get('/', menuView);
-app.get('/cadastrarProduto', cadastroProdutoView);
-app.post('/cadastrarProduto', cadastraProduto);
+app.get('/cadastrarEmpresa', cadastrodeEmpresasView);
+app.post('/cadastrarEmpresa', cadastraEmpresa);
+
+
 
 
 app.listen(porta, host, () => {
-    console.log(`Servidor iniciado e em execução no endereço http://${host}:${porta}`);
+    console.log(`Servidor rodando em http://${host}:${porta}`);
 });
